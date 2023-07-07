@@ -210,6 +210,7 @@
 	4.2.2 - (2023-06-23) - Fixed Windows 10 22H2 missing switch value
 #>
 [CmdletBinding(SupportsShouldProcess = $true, DefaultParameterSetName = "BareMetal")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", '', Justification="When using this in a task sequence we can only pass plain text.")]
 param(
 	[parameter(Mandatory = $true, ParameterSetName = "BareMetal", HelpMessage = "Set the script to operate in 'BareMetal' deployment type mode.")]
 	[switch]$BareMetal,
