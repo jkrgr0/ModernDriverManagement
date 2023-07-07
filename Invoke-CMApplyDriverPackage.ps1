@@ -1697,6 +1697,7 @@ Process {
 		else {
 			# Computer model match was not found
 			# Set properties for custom object for return value
+			Write-CMLogEntry -Value " - Not matched computer model: $($DriverPackageInput) - $($ComputerData.Model)" -Severity 1
 			$ModelDetectionResult.Detected = $false
 			
 			return $ModelDetectionResult
@@ -1794,6 +1795,7 @@ Process {
 		else {
 			# None of the above methods worked to match SystemSKU from driver package input with computer data input
 			# Set properties for custom object for return value
+			Write-CMLogEntry -Value " - Not matched SystemSKU: $($DriverPackageInput) - $($ComputerData.SystemSKU) ($($ComputerData.FallBackSKU))" -Severity 1
 			$SystemSKUDetectionResult.SystemSKUValue = ""
 			$SystemSKUDetectionResult.Detected = $false
 			
