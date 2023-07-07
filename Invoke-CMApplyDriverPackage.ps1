@@ -212,6 +212,7 @@
 						 - Fixed linter warnings
 						 - Removed trailing spaces
 						 - Added additional log messages if SystemSKU or ComputerModel isn't a match
+						 - Set best available security protocol types
 #>
 [CmdletBinding(SupportsShouldProcess = $true, DefaultParameterSetName = "BareMetal")]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", '', Justification="When using this in a task sequence we can only pass plain text.")]
@@ -368,6 +369,18 @@ Process {
 	}
 
 	# Functions
+	function Set-BestSecurityProtocol {
+		$ProtocolTypes = [Enum]::GetNames([System.Net.SecurityProtocolType])
+		If ($ProtocolTypes -contains 'Tls13') {
+			$BestSecurityProtocol = 'Tls12, Tls13'
+		} ElseIf ($ProtocolTypes -contains 'Tls12') {
+			$BestSecurityProtocol = 'Tls11, Tls12'
+		} Else {
+			$BestSecurityProtocol = 'Tls, Tls11'
+		}
+		Write-CMLogEntry -Value " - Setting security protocol to best available types: $($BestSecurityProtocol)" -Severity 1
+		[System.Net.ServicePointManager]::SecurityProtocol = $BestSecurityProtocol
+	}
 	function Write-CMLogEntry {
 		param(
 			[parameter(Mandatory = $true, HelpMessage = "Value added to the log file.")]
@@ -2170,6 +2183,9 @@ Process {
 	}
 	Write-CMLogEntry -Value " - Apply driver package deployment type: $($PSCmdLet.ParameterSetName)" -Severity 1
 	Write-CMLogEntry -Value " - Apply driver package operational mode: $($OperationalMode)" -Severity 1
+
+	# Set the best available security protocol types
+	Set-BestSecurityProtocol
 
 	# Set script error preference variable
 	$ErrorActionPreference = "Stop"
