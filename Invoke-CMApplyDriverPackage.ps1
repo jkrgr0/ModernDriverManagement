@@ -1351,7 +1351,7 @@ Process {
 				DateCreated = $DriverPackageItem.SourceDate
 				Manufacturer = $DriverPackageItem.Manufacturer
 				Model = $null
-				SystemSKU = $DriverPackageItem.Description.Split(":").Replace("(", "").Replace(")", "")[1]
+				SystemSKU = $DriverPackageItem.Description.Replace("Models included:", "").Replace("(", "").Replace(")", "")
 				OSName = $null
 				OSVersion = $null
 				Architecture = $null
