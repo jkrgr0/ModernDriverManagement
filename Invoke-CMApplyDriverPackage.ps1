@@ -805,7 +805,7 @@ Process {
 		try {
 			Write-CMLogEntry -Value " - Attempting to locate PSIntuneAuth module" -Severity 1
 			$PSIntuneAuthModule = Get-InstalledModule -Name "PSIntuneAuth" -ErrorAction Stop -Verbose:$false
-			if ($PSIntuneAuthModule -ne $null) {
+			if ($null -ne $PSIntuneAuthModule) {
 				Write-CMLogEntry -Value " - Authentication module detected, checking for latest version" -Severity 1
 				$LatestModuleVersion = (Find-Module -Name "PSIntuneAuth" -ErrorAction SilentlyContinue -Verbose:$false).Version
 				if ($LatestModuleVersion -gt $PSIntuneAuthModule.Version) {
@@ -922,7 +922,7 @@ Process {
 		}
 		
 		# Add returned driver package objects to array list
-		if ($AdminServiceResponse.value -ne $null) {
+		if ($null -ne $AdminServiceResponse.value) {
 			foreach ($Package in $AdminServiceResponse.value) {
 				$PackageArray.Add($Package) | Out-Null
 			}
@@ -1107,7 +1107,7 @@ Process {
 			}
 			
 			# Handle return value
-			if ($Packages -ne $null) {
+			if ($null -ne $Packages) {
 				Write-CMLogEntry -Value " - Retrieved a total of '$(($Packages | Measure-Object).Count)' driver packages from $($Script:PackageSource) matching operational mode: $($OperationalMode)" -Severity 1
 				return $Packages
 			}
@@ -1271,12 +1271,12 @@ Process {
 			"SystemSKUDetected" = $false
 		}
 		
-		if (($InputObject.Model -ne $null) -and (-not ([System.String]::IsNullOrEmpty($InputObject.Model)))) {
+		if (($null -ne $InputObject.Model) -and (-not ([System.String]::IsNullOrEmpty($InputObject.Model)))) {
 			Write-CMLogEntry -Value " - Computer model detection was successful" -Severity 1
 			$ComputerDetection.ModelDetected = $true
 		}
 		
-		if (($InputObject.SystemSKU -ne $null) -and (-not ([System.String]::IsNullOrEmpty($InputObject.SystemSKU)))) {
+		if (($null -ne $InputObject.SystemSKU) -and (-not ([System.String]::IsNullOrEmpty($InputObject.SystemSKU)))) {
 			Write-CMLogEntry -Value " - Computer SystemSKU detection was successful" -Severity 1
 			$ComputerDetection.SystemSKUDetected = $true
 		}
@@ -1393,7 +1393,7 @@ Process {
 			
 			# Set counters for logging output of how many matching checks was successfull
 			$DetectionCounter = 0
-			if ($DriverPackageDetails.OSVersion -ne $null) {
+			if ($null -ne $DriverPackageDetails.OSVersion) {
 				$DetectionMethodsCount = 4
 			}
 			else {
@@ -1437,7 +1437,7 @@ Process {
 						# Increase detection counter since OS architecture detection was successful
 						$DetectionCounter++
 						
-						if ($DriverPackageDetails.OSVersion -ne $null) {
+						if ($null -ne $DriverPackageDetails.OSVersion) {
 							# Handle if OS version should check for fallback versions or match with data from OSImageData variable
 							if ($OSVersionFallback -eq $true) {
 								$OSVersionDetectionResult = Confirm-OSVersion -DriverPackageInput $DriverPackageDetails.OSVersion -OSImageData $OSImageData -OSVersionFallback $true
@@ -1504,7 +1504,7 @@ Process {
 					$_.Name -notmatch "Pilot" -and $_.Name -notmatch "Retired"
 				}
 				
-				if ($FallbackDriverPackages -ne $null) {
+				if ($null -ne $FallbackDriverPackages) {
 					Write-CMLogEntry -Value " - Retrieved a total of '$(($FallbackDriverPackages | Measure-Object).Count)' fallback driver packages from AdminService matching 'Driver Fallback Package' within the name" -Severity 1
 					
 					# Sort all fallback driver package objects by package name property
@@ -1854,7 +1854,7 @@ Process {
 				Write-CMLogEntry -Value " - Amount of driver packages detected by validation process: $($DriverPackageList.Count)" -Severity 1
 				
 				if ($ComputerDetectionMethod -like "SystemSKU") {
-					if (($DriverPackageList | Where-Object { $_.SystemSKU -notlike $DriverPackageList[0].SystemSKU }) -eq $null) {
+					if ($null -eq ($DriverPackageList | Where-Object { $_.SystemSKU -notlike $DriverPackageList[0].SystemSKU })) {
 						Write-CMLogEntry -Value " - NOTICE: Computer detection method is currently '$($ComputerDetectionMethod)', and multiple packages have been matched with the same SystemSKU value" -Severity 1
 						Write-CMLogEntry -Value " - NOTICE: This is a supported scenario where the vendor use the same driver package for multiple models" -Severity 1
 						Write-CMLogEntry -Value " - NOTICE: Validation process will automatically choose the most recently created driver package, even if it means that the computer model names may not match" -Severity 1
@@ -1973,7 +1973,7 @@ Process {
 		)
 		# Detect if downloaded driver package content is a compressed archive that needs to be extracted before drivers are installed
 		$DriverPackageCompressedFile = Get-ChildItem -Path $ContentLocation -Filter "DriverPackage.*"
-		if ($DriverPackageCompressedFile -ne $null) {
+		if ($null -ne $DriverPackageCompressedFile) {
 			Write-CMLogEntry -Value " - Downloaded driver package content contains a compressed archive with driver content" -Severity 1
 			
 			# Detect if compressed format is Windows native zip or 7-Zip exe
@@ -2070,7 +2070,7 @@ Process {
 							
 							# Get driver full path and install each driver seperately
 							$DriverINFs = Get-ChildItem -Path $ContentLocation -Recurse -Filter "*.inf" -ErrorAction Stop | Select-Object -Property FullName, Name
-							if ($DriverINFs -ne $null) {
+							if ($null -ne $DriverINFs) {
 								foreach ($DriverINF in $DriverINFs) {
 									# Install specific driver
 									Write-CMLogEntry -Value " - Attempting to install driver: $($DriverINF.FullName)" -Severity 1
@@ -2137,7 +2137,7 @@ Process {
 		}
 		
 		# Cleanup potential compressed driver package content
-		if ($DriverPackageCompressedFile -ne $null) {
+		if ($null -ne $DriverPackageCompressedFile) {
 			switch -wildcard ($DriverPackageCompressedFile.Name) {
 				"*.wim" {
 					try {
