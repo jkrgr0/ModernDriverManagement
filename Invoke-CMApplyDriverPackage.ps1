@@ -110,9 +110,9 @@
 	Author:      Nickolaj Andersen / Maurice Daly
     Contact:     @NickolajA / @MoDaly_IT
     Created:     2017-03-27
-    Updated:     2022-03-05
+    Updated:     2023-07-07
 
-	Contributors: @CodyMathis123, @JamesMcwatty
+	Contributors: @CodyMathis123, @JamesMcwatty, @jkrgr0
 
     Version history:
     1.0.0 - (2017-03-27) - Script created
@@ -208,6 +208,10 @@
 						 - Fixed several issues related to the Fallback Driver Package functionality where old code was left behind from the webservice days
 	4.2.1 - (2022-09-22) - Added support for Windows 10 22H2
 	4.2.2 - (2023-06-23) - Fixed Windows 10 22H2 missing switch value
+	4.2.3 - (2023-07-07) - Fixed SystemSKU with special characters processing in driver package description
+						 - Fixed linter warnings
+						 - Removed trailing spaces
+						 - Added additional log messages if SystemSKU or ComputerModel isn't a match
 #>
 [CmdletBinding(SupportsShouldProcess = $true, DefaultParameterSetName = "BareMetal")]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", '', Justification="When using this in a task sequence we can only pass plain text.")]
